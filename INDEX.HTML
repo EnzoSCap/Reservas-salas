@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reservas de Salas – Protótipo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; max-width:800px; }
+    h1 { color:#333 }
+    label { display:block; margin-top:8px }
+    input, select { padding:6px; margin-top:4px; width:100% }
+    button { margin-top:10px; padding:8px 12px }
+    .row { display:flex; gap:12px }
+    .col { flex:1 }
+    .error { color:#a00 }
+    ul { list-style:none; padding:0 }
+    li { padding:8px 0; border-bottom:1px solid #ddd }
+  </style>
+</head>
+<body>
+  <h1>Reservas de Salas – Protótipo</h1>
+
+  <section>
+    <h2>Cadastrar Sala</h2>
+    <form id="formSala">
+      <label>Nome da sala:<input type="text" id="nomeSala" required /></label>
+      <label>Capacidade:<input type="number" id="capacidadeSala" required /></label>
+      <button type="submit">Adicionar Sala</button>
+      <div id="msgSala" class="error"></div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Nova Reserva</h2>
+    <form id="formReserva">
+      <label>Sala:
+        <select id="reservaSala"></select>
+      </label>
+      <div class="row">
+        <div class="col">
+          <label>Início:<input type="datetime-local" id="inicio" required /></label>
+        </div>
+        <div class="col">
+          <label>Fim:<input type="datetime-local" id="fim" required /></label>
+        </div>
+      </div>
+      <label>Usuário ID (simulação):<input type="number" id="usuarioId" value="1" required /></label>
+      <button type="submit">Criar Reserva</button>
+      <div id="msgReserva" class="error"></div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Salas Cadastradas</h2>
+    <ul id="listaSalas"></ul>
+  </section>
+
+  <section>
+    <h2>Reservas</h2>
+    <ul id="listaReservas"></ul>
+  </section>
+
+<script>
+  const API = "http://localhost:3000/api";
+
+  async function carregarSalas() {
+    try {
+      const res = await fetch(`${API}/salas`);
+      const salas = await res.json();
+      const ul = document.getElementById("listaSalas");
+      const select = document.getElementById("reservaSala");
+      ul.innerHTML = "";
+      select.innerHTML = "";
+      salas.forEach(s => {
+        const li = document.createElement("li");
+        li.textContent = `${s.nome} (capacidade: ${s.capacidade})`;
+        ul.appendChild(li);
+
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = s.nome;
+        select.appendChild(opt);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function carregarReservas() {
+    try {
+      const res = await fetch(`${API}/reservas`);
+      const reservas = await res.json();
+      const ul = document.getElementById("listaReservas");
+      ul.innerHTML = "";
+      reservas.forEach(r => {
+        const li = document.createElement("li");
+        li.textContent = `Sala ${r.sala_id} — ${r.inicio} → ${r.fim} (Usuário: ${r.usuario_id})`;
+        ul.appendChild(li);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  document.getElementById("formSala").addEventListener("submit", async e => {
+    e.preventDefault();
+    document.getElementById("msgSala").textContent = "";
+    const nome = document.getElementById("nomeSala").value.trim();
+    const capacidade = document.getElementById("capacidadeSala").value;
+    try {
+      const res = await fetch(`${API}/salas`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ nome, capacidade })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro");
+      document.getElementById("formSala").reset();
+      carregarSalas();
+    } catch (err) {
+      document.getElementById("msgSala").textContent = err.message;
+    }
+  });
+
+  document.getElementById("formReserva").addEventListener("submit", async e => {
+    e.preventDefault();
+    document.getElementById("msgReserva").textContent = "";
+    const sala_id = document.getElementById("reservaSala").value;
+    const inicio = document.getElementById("inicio").value;
+    const fim = document.getElementById("fim").value;
+    const usuario_id = document.getElementById("usuarioId").value;
+
+    if (!sala_id || !inicio || !fim) {
+      document.getElementById("msgReserva").textContent = "Preencha todos os campos";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/reservas`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ usuario_id, sala_id, inicio, fim })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro");
+      document.getElementById("formReserva").reset();
+      carregarReservas();
+    } catch (err) {
+      document.getElementById("msgReserva").textContent = err.message;
+    }
+  });
+
+  carregarSalas();
+  carregarReservas();
+</script>
+</body>
+</html>
