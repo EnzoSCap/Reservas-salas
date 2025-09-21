@@ -31,7 +31,7 @@ O sistema permite cadastrar salas, criar reservas com verificação de conflitos
 ## 🚀 Como Executar Localmente
 
 1. Clone este repositório:
-   ```bash
+
 https://github.com/enzoscap/Reservas-salas
 
 2. Acesse a pasta do projeto:
