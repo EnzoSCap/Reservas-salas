@@ -4,44 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sistema de Reservas de Salas</title>
-  <!-- Bootstrap CSS -->
+
+  <!-- Bootstrap 5 -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet">
+
+  <!-- Ícones Bootstrap (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
-      <span class="navbar-brand">Reservas de Salas</span>
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="bi bi-calendar-check me-1"></i>
+        Reservas de Salas
+      </a>
     </div>
   </nav>
 
-  <div class="container">
+  <main class="container py-4">
     <div class="row g-4">
-
-      <!-- Formulário de criação de sala -->
-      <div class="col-md-4">
-        <div class="card shadow-sm">
+      
+      <!-- Coluna de formulários -->
+      <aside class="col-lg-4">
+        <!-- Cadastro de Sala -->
+        <section class="card shadow-sm mb-4">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-door-closed"></i> Cadastrar Sala
+          </div>
           <div class="card-body">
-            <h5 class="card-title">Cadastrar Sala</h5>
             <form id="formSala">
               <div class="mb-3">
                 <label class="form-label">Nome da sala</label>
-                <input type="text" class="form-control" id="nomeSala" required>
+                <input type="text" class="form-control" id="nomeSala" placeholder="Ex.: Laboratório 1" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Capacidade</label>
-                <input type="number" class="form-control" id="capacidadeSala" required>
+                <input type="number" class="form-control" id="capacidadeSala" placeholder="Ex.: 30" required>
               </div>
-              <button type="submit" class="btn btn-primary w-100">Adicionar</button>
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-plus-circle"></i> Adicionar
+              </button>
             </form>
           </div>
-        </div>
+        </section>
 
-        <div class="card shadow-sm mt-4">
+        <!-- Nova Reserva -->
+        <section class="card shadow-sm">
+          <div class="card-header bg-success text-white">
+            <i class="bi bi-pencil-square"></i> Nova Reserva
+          </div>
           <div class="card-body">
-            <h5 class="card-title">Nova Reserva</h5>
             <form id="formReserva">
               <div class="mb-3">
                 <label class="form-label">Sala</label>
@@ -51,39 +70,56 @@
                 <label class="form-label">Data</label>
                 <input type="date" class="form-control" id="dataReserva" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Hora início</label>
-                <input type="time" class="form-control" id="horaInicio" required>
+              <div class="mb-3 row">
+                <div class="col">
+                  <label class="form-label">Hora início</label>
+                  <input type="time" class="form-control" id="horaInicio" required>
+                </div>
+                <div class="col">
+                  <label class="form-label">Hora fim</label>
+                  <input type="time" class="form-control" id="horaFim" required>
+                </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Hora fim</label>
-                <input type="time" class="form-control" id="horaFim" required>
-              </div>
-              <button type="submit" class="btn btn-success w-100">Reservar</button>
+              <button type="submit" class="btn btn-success w-100">
+                <i class="bi bi-check-circle"></i> Reservar
+              </button>
             </form>
           </div>
-        </div>
-      </div>
+        </section>
+      </aside>
 
-      <!-- Listagens -->
-      <div class="col-md-8">
+      <!-- Coluna de listagens -->
+      <section class="col-lg-8">
+        <!-- Salas -->
         <div class="card shadow-sm mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Salas Cadastradas</h5>
-            <ul class="list-group" id="listaSalas"></ul>
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-door-open"></i> Salas Cadastradas
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush" id="listaSalas">
+              <!-- Populado via app.js -->
+            </ul>
           </div>
         </div>
 
+        <!-- Reservas -->
         <div class="card shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">Reservas</h5>
-            <ul class="list-group" id="listaReservas"></ul>
+          <div class="card-header bg-success text-white">
+            <i class="bi bi-calendar-event"></i> Reservas
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush" id="listaReservas">
+              <!-- Populado via app.js -->
+            </ul>
           </div>
         </div>
-      </div>
-
+      </section>
     </div>
-  </div>
+  </main>
+
+  <footer class="text-center text-muted py-4">
+    <small>Protótipo para disciplina Engenharia e Projeto de Software – Dados salvos no navegador (localStorage).</small>
+  </footer>
 
   <script src="app.js"></script>
 </body>
