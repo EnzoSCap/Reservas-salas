@@ -1,23 +1,21 @@
-# Reservas-salas
-# Sistema de Reservas de Salas
+# Sistema de Reservas de Salas — Protótipo (GitHub Pages)
 
-Protótipo desenvolvido para a disciplina **Engenharia e Projeto de Software**.
+**Disciplina:** Engenharia e Projeto de Software  
+**Aluno:** Enzo Soares Capdeville (substitua se necessário)  
+**Resumo:** Protótipo cliente-only (Single Page App) que permite cadastrar usuários, criar salas e reservar horários com verificação de conflitos. Dados persistem no `localStorage` do navegador. Ideal para entrega via GitHub Pages.
 
-## 🎯 Objetivo
-Sistema web que permite cadastrar salas, criar e gerenciar reservas com verificação de conflitos de horário.
+## Como executar
+1. Acesse o GitHub Pages do repositório (ver instruções abaixo) ou simplesmente abra `index.html` localmente no navegador.
+2. Registrar um usuário (ou usar credenciais: admin@local / admin).  
+3. Como administrador (`tipo=admin`) você pode criar salas. Depois crie reservas.
 
-## 🏗️ Tecnologias
-- **Backend:** Node.js, Express, SQLite
-- **Frontend:** HTML, CSS e JavaScript simples
-- **Versionamento:** Git/GitHub
+## Publicação no GitHub Pages
+- Vá em **Settings → Pages** e selecione **branch: main** e **root**. Salve.  
+- Após alguns minutos, a página ficará disponível em: `https://<seu-usuario>.github.io/<seu-repo>/`
 
-## 🚀 Como Executar Localmente
+## Observações
+- Protótipo 100% client-side para facilitar avaliação e publicação sem servidor.
+- Export/Import de dados disponível para compartilhar estado entre avaliadores.
 
-### Pré-requisitos
-- Node.js LTS instalado
-- Navegador moderno (Chrome, Firefox, Edge, etc.)
-
-### Passos
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/<seu-usuario>/reservas-salas.git
+## Estrutura
+- `index.html` — aplicação completa (HTML / CSS / JS)
