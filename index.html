@@ -1,462 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Protótipo - Reservas de Salas (GitHub Pages)</title>
-  <style>
-    :root{--accent:#2b7a78;--muted:#666}
-    body{font-family:Inter,Segoe UI,Arial; margin:0; background:#f6f8f9; color:#222}
-    header{background:var(--accent); color:#fff; padding:16px 20px}
-    .container{max-width:1100px;margin:20px auto;padding:16px}
-    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
-    .card{background:#fff;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    h1,h2{margin:0 0 10px}
-    label{display:block;margin-top:8px;font-size:14px}
-    input,select,button,textarea{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-top:6px;box-sizing:border-box}
-    button{background:var(--accent);color:#fff;border:none;cursor:pointer}
-    .muted{color:var(--muted);font-size:13px}
-    ul.list{list-style:none;padding:0;margin:0}
-    ul.list li{padding:8px 6px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
-    .small{font-size:13px;padding:6px 10px;border-radius:6px}
-    .actions{display:flex;gap:8px}
-    .danger{background:#c0392b}
-    .info{background:#116466}
-    footer{font-size:13px;color:#666;margin-top:18px;text-align:center}
-    .topbar{display:flex;gap:12px;align-items:center}
-    .role-badge{background:#fff;color:var(--accent);padding:4px 8px;border-radius:6px;font-weight:600}
-    .header-right{margin-left:auto}
-    .filters{display:flex;gap:8px;align-items:center}
-    .note{background:#fff8c5;padding:10px;border-radius:6px;margin-bottom:12px;border-left:4px solid #f1c40f}
-    @media(max-width:880px){.grid{grid-template-columns:1fr}.container{padding:10px}}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema de Reservas de Salas</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<header>
-  <div class="container topbar">
-    <div>
-      <h1 style="font-size:20px">Reservas de Salas — Protótipo (GitHub Pages)</h1>
-      <div class="muted">Protótipo cliente-only para a disciplina Engenharia e Projeto de Software</div>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+      <span class="navbar-brand">Reservas de Salas</span>
     </div>
-    <div class="header-right">
-      <span id="usuarioInfo" class="role-badge" style="display:none"></span>
-    </div>
-  </div>
-</header>
+  </nav>
 
-<main class="container">
-  <div class="grid">
-    <!-- Coluna esquerda: Autenticação, Sala, Reserva -->
-    <div>
-      <div id="authCard" class="card">
-        <h2>Autenticação</h2>
-        <div id="authForms">
-          <!-- Registro -->
-          <div id="registerView">
-            <label>Nome
-              <input id="regNome" placeholder="Seu nome"/>
-            </label>
-            <label>Email
-              <input id="regEmail" placeholder="email@exemplo.com"/>
-            </label>
-            <label>Senha
-              <input id="regSenha" type="password" placeholder="senha"/>
-            </label>
-            <label>Perfil
-              <select id="regTipo"><option value="user">Usuário</option><option value="admin">Administrador</option></select>
-            </label>
-            <button onclick="registrarUsuario()">Registrar</button>
-            <div style="margin-top:8px;text-align:center">
-              <a href="#" onclick="mostrarLogin(event)">Já tenho conta / Entrar</a>
-            </div>
-          </div>
+  <div class="container">
+    <div class="row g-4">
 
-          <!-- Login -->
-          <div id="loginView" style="display:none">
-            <label>Email
-              <input id="loginEmail" placeholder="email@exemplo.com"/>
-            </label>
-            <label>Senha
-              <input id="loginSenha" type="password" placeholder="senha"/>
-            </label>
-            <button onclick="fazerLogin()">Entrar</button>
-            <div style="margin-top:8px;text-align:center">
-              <a href="#" onclick="mostrarRegistro(event)">Criar nova conta</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="salasCard" class="card" style="margin-top:14px">
-        <h2>Gerenciar Salas</h2>
-        <div id="salaFormWrap">
-          <label>Nome da Sala
-            <input id="nomeSala"/>
-          </label>
-          <label>Capacidade
-            <input id="capacidadeSala" type="number"/>
-          </label>
-          <button onclick="criarSala()">Adicionar Sala</button>
-          <div class="muted" style="margin-top:8px">Apenas administradores podem criar/editar/excluir salas.</div>
-        </div>
-        <hr style="margin:12px 0"/>
-        <h3>Salas</h3>
-        <ul id="listaSalas" class="list"></ul>
-      </div>
-
-      <div id="utilCard" class="card" style="margin-top:14px">
-        <h2>Utilitários</h2>
-        <div class="note">Este protótipo salva dados no <strong>localStorage</strong> do navegador. Você pode exportar/importar JSON.</div>
-        <div style="display:flex;gap:8px">
-          <button onclick="exportarDados()">Exportar JSON</button>
-          <button onclick="importarPrompt()">Importar JSON</button>
-          <button class="danger" onclick="resetarDados()">Resetar Dados</button>
-        </div>
-        <div style="margin-top:10px">
-          <button onclick="baixarRelatorio()" class="small info">Gerar Relatório Simples (.txt)</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Coluna direita: Reservas, filtros e listagem -->
-    <div>
-      <div class="card">
-        <div style="display:flex;align-items:center;gap:12px">
-          <h2 style="margin:0">Reservas</h2>
-          <div class="filters" style="margin-left:auto">
-            <select id="filterSala" onchange="renderReservas()"><option value="all">Todas as salas</option></select>
-            <input id="filterDate" type="date" onchange="renderReservas()" />
-            <button onclick="mostrarFormReserva()" class="small">Nova Reserva</button>
+      <!-- Formulário de criação de sala -->
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Cadastrar Sala</h5>
+            <form id="formSala">
+              <div class="mb-3">
+                <label class="form-label">Nome da sala</label>
+                <input type="text" class="form-control" id="nomeSala" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Capacidade</label>
+                <input type="number" class="form-control" id="capacidadeSala" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Adicionar</button>
+            </form>
           </div>
         </div>
 
-        <div id="reservaForm" style="margin-top:12px;display:none">
-          <label>Sala
-            <select id="reservaSala"></select>
-          </label>
-          <label>Data
-            <input id="reservaData" type="date"/>
-          </label>
-          <label>Hora início
-            <input id="reservaInicio" type="time"/>
-          </label>
-          <label>Hora fim
-            <input id="reservaFim" type="time"/>
-          </label>
-          <label>Finalidade
-            <input id="reservaFinalidade"/>
-          </label>
-          <button onclick="criarReserva()">Confirmar Reserva</button>
-          <button onclick="fecharFormReserva()" style="background:#aaa;margin-top:8px">Cancelar</button>
-        </div>
-
-        <hr style="margin:12px 0"/>
-        <div id="listaReservasWrap">
-          <ul id="listaReservas" class="list"></ul>
+        <div class="card shadow-sm mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Nova Reserva</h5>
+            <form id="formReserva">
+              <div class="mb-3">
+                <label class="form-label">Sala</label>
+                <select class="form-select" id="salaReserva"></select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Data</label>
+                <input type="date" class="form-control" id="dataReserva" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Hora início</label>
+                <input type="time" class="form-control" id="horaInicio" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Hora fim</label>
+                <input type="time" class="form-control" id="horaFim" required>
+              </div>
+              <button type="submit" class="btn btn-success w-100">Reservar</button>
+            </form>
+          </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:14px">
-        <h3>Ajuda rápida</h3>
-        <ol style="padding-left:18px">
-          <li>Registre-se (crie conta). Se quiser testar recursos admin, cadastre com perfil <strong>Administrador</strong>.</li>
-          <li>Como admin: crie salas em "Gerenciar Salas".</li>
-          <li>Logged in: clique "Nova Reserva" e salve. O sistema valida conflitos para a mesma sala.</li>
-          <li>Use Export/Import para compartilhar dados (execução em outro navegador).</li>
-        </ol>
+      <!-- Listagens -->
+      <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Salas Cadastradas</h5>
+            <ul class="list-group" id="listaSalas"></ul>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Reservas</h5>
+            <ul class="list-group" id="listaReservas"></ul>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
-  <footer class="muted">Protótipo SPA (client-side) — armazenagem local (localStorage). Subir no GitHub Pages para entregar.</footer>
-</main>
-
-<script>
-/* --------------------------
-   Protótipo SPA - Cliente only
-   Dados persistidos em localStorage
-   --------------------------*/
-
-/* ---------- utilidades ---------- */
-const L_KEYS = {USERS:'rp_users_v1', ROOMS:'rp_rooms_v1', BOOKS:'rp_books_v1', CUR:'rp_current_v1'};
-
-function uid(prefix='id') { return prefix + '_' + Math.random().toString(36).slice(2,9); }
-function nowISO(){ return new Date().toISOString(); }
-function load(key){ try{ return JSON.parse(localStorage.getItem(key) || 'null'); } catch(e){ return null; } }
-function save(key,obj){ localStorage.setItem(key, JSON.stringify(obj)); }
-
-/* ---------- dados iniciais ---------- */
-function seedIfEmpty(){
-  if(!load(L_KEYS.USERS)){
-    const admin = { id: uid('u'), nome: 'Admin', email: 'admin@local', senha:'admin', tipo:'admin' };
-    const user = { id: uid('u'), nome: 'Aluno', email: 'aluno@local', senha:'aluno', tipo:'user' };
-    save(L_KEYS.USERS, [admin,user]);
-  }
-  if(!load(L_KEYS.ROOMS)){
-    const r1={id:uid('r'), nome:'LAB-01', capacidade:30};
-    const r2={id:uid('r'), nome:'SALA-A', capacidade:20};
-    save(L_KEYS.ROOMS,[r1,r2]);
-  }
-  if(!load(L_KEYS.BOOKS)){
-    save(L_KEYS.BOOKS,[]);
-  }
-  renderAuthState();
-  renderSalasList();
-  populateSalaSelects();
-  renderReservas();
-}
-
-/* ---------- autenticação ---------- */
-function getUsers(){ return load(L_KEYS.USERS) || []; }
-function setUsers(arr){ save(L_KEYS.USERS,arr); }
-function getRooms(){ return load(L_KEYS.ROOMS) || []; }
-function setRooms(arr){ save(L_KEYS.ROOMS,arr); }
-function getReservas(){ return load(L_KEYS.BOOKS) || []; }
-function setReservas(arr){ save(L_KEYS.BOOKS,arr); }
-
-function registrarUsuario(){
-  const nome=document.getElementById('regNome').value.trim();
-  const email=document.getElementById('regEmail').value.trim().toLowerCase();
-  const senha=document.getElementById('regSenha').value;
-  const tipo=document.getElementById('regTipo').value;
-  if(!nome||!email||!senha){ alert('Preencha todos os campos.'); return; }
-  const users=getUsers();
-  if(users.find(u=>u.email===email)){ alert('Email já cadastrado'); return; }
-  const novo={id:uid('u'), nome, email, senha, tipo};
-  users.push(novo); setUsers(users);
-  alert('Usuário registrado. Faça login.');
-  mostrarLogin();
-}
-
-function fazerLogin(){
-  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
-  const senha=document.getElementById('loginSenha').value;
-  const users=getUsers();
-  const user=users.find(u=>u.email===email && u.senha===senha);
-  if(!user){ alert('Credenciais inválidas.'); return; }
-  save(L_KEYS.CUR, user);
-  renderAuthState();
-  alert('Logado como: ' + user.nome);
-}
-
-function logout(){
-  localStorage.removeItem(L_KEYS.CUR);
-  renderAuthState();
-}
-
-function mostrarRegistro(e){ if(e) e.preventDefault(); document.getElementById('loginView').style.display='none'; document.getElementById('registerView').style.display='block'; }
-function mostrarLogin(e){ if(e) e.preventDefault(); document.getElementById('loginView').style.display='block'; document.getElementById('registerView').style.display='none'; }
-
-function currentUser(){ return load(L_KEYS.CUR); }
-function isAdmin(){ const u=currentUser(); return u && u.tipo==='admin'; }
-
-function renderAuthState(){
-  const cur=currentUser();
-  const info=document.getElementById('usuarioInfo');
-  if(cur){ info.style.display='inline-block'; info.textContent = cur.nome + ' ('+cur.tipo+')'; }
-  else { info.style.display='none'; info.textContent=''; }
-  // controlar visibilidade do formulário de criação de salas para não-admin
-  document.getElementById('nomeSala').disabled = !isAdmin();
-  document.getElementById('capacidadeSala').disabled = !isAdmin();
-  document.querySelector('#salaFormWrap button').disabled = !isAdmin();
-  // botão logout/add login
-  // adicionar botão logout visível
-  if(cur){
-    if(!document.getElementById('logoutBtn')){
-      const btn=document.createElement('button'); btn.id='logoutBtn'; btn.textContent='Sair'; btn.style.marginLeft='10px';
-      btn.onclick = logout;
-      document.querySelector('.header-right').appendChild(btn);
-    }
-  } else {
-    const b=document.getElementById('logoutBtn'); if(b) b.remove();
-  }
-}
-
-/* ---------- salas ---------- */
-function criarSala(){
-  if(!isAdmin()){ alert('Apenas administradores podem criar salas.'); return; }
-  const nome=document.getElementById('nomeSala').value.trim();
-  const cap=parseInt(document.getElementById('capacidadeSala').value);
-  if(!nome || !cap){ alert('Preencha nome e capacidade'); return; }
-  const rooms=getRooms();
-  rooms.push({id:uid('r'), nome, capacidade:cap});
-  setRooms(rooms);
-  document.getElementById('nomeSala').value=''; document.getElementById('capacidadeSala').value='';
-  renderSalasList();
-  populateSalaSelects();
-  alert('Sala criada.');
-}
-
-function renderSalasList(){
-  const ul=document.getElementById('listaSalas'); ul.innerHTML='';
-  const rooms=getRooms();
-  rooms.forEach(r=>{
-    const li=document.createElement('li');
-    li.innerHTML = `<div><strong>${r.nome}</strong><div class="muted">capacidade: ${r.capacidade}</div></div>`;
-    const actions=document.createElement('div'); actions.className='actions';
-    if(isAdmin()){
-      const del=document.createElement('button'); del.textContent='Excluir'; del.className='small'; del.onclick=()=>{ if(confirm('Excluir sala?')){ delSala(r.id); } };
-      actions.appendChild(del);
-    }
-    li.appendChild(actions);
-    ul.appendChild(li);
-  });
-}
-
-function delSala(id){
-  // remover sala e reservas relacionadas
-  let rooms=getRooms(); rooms = rooms.filter(r=>r.id!==id); setRooms(rooms);
-  let reservas=getReservas(); reservas = reservas.filter(b=>b.sala_id!==id); setReservas(reservas);
-  renderSalasList(); populateSalaSelects(); renderReservas();
-}
-
-/* ---------- reservas ---------- */
-function mostrarFormReserva(){ 
-  const cur=currentUser(); 
-  if(!cur){ alert('Faça login para criar reservas.'); return; }
-  document.getElementById('reservaForm').style.display='block';
-  document.getElementById('reservaData').value = new Date().toISOString().slice(0,10);
-}
-
-function fecharFormReserva(){ document.getElementById('reservaForm').style.display='none'; }
-
-function criarReserva(){
-  const cur=currentUser(); if(!cur){ alert('Faça login antes'); return; }
-  const sala_id=document.getElementById('reservaSala').value;
-  const data=document.getElementById('reservaData').value;
-  const inicio=document.getElementById('reservaInicio').value;
-  const fim=document.getElementById('reservaFim').value;
-  const finalidade=document.getElementById('reservaFinalidade').value.trim() || 'Sem descrição';
-  if(!sala_id||!data||!inicio||!fim){ alert('Preencha todos os campos'); return; }
-  // montar ISO
-  const inicioISO = new Date(data + 'T' + inicio + ':00').toISOString();
-  const fimISO = new Date(data + 'T' + fim + ':00').toISOString();
-  if(Date.parse(fimISO) <= Date.parse(inicioISO)){ alert('Horário inválido: fim deve ser depois do início'); return; }
-  // conflito: mesma sala e sobreposição
-  const reservas=getReservas();
-  const conflitos = reservas.filter(r=>{
-    if(r.sala_id !== sala_id) return false;
-    // overlap if NOT (r.fim <= inicioISO OR r.inicio >= fimISO)
-    return !( Date.parse(r.fim) <= Date.parse(inicioISO) || Date.parse(r.inicio) >= Date.parse(fimISO) );
-  });
-  if(conflitos.length>0){ alert('Conflito: já existe reserva nesse horário para a mesma sala.'); return; }
-  // ok, criar
-  reservas.push({ id: uid('b'), usuario_id: cur.id, sala_id, inicio: inicioISO, fim: fimISO, finalidade, status:'CONFIRMADA', criadoEm: nowISO() });
-  setReservas(reservas);
-  fecharFormReserva(); renderReservas();
-  alert('Reserva criada com sucesso.');
-}
-
-function renderReservas(){
-  const lista=document.getElementById('listaReservas'); lista.innerHTML='';
-  const filtroSala=document.getElementById('filterSala').value;
-  const filtroData=document.getElementById('filterDate').value;
-  const reservas=getReservas();
-  const rooms=getRooms();
-  const users=getUsers();
-  const orden = reservas.slice().sort((a,b)=> Date.parse(a.inicio) - Date.parse(b.inicio) );
-  const filtradas = orden.filter(r=>{
-    if(filtroSala!=='all' && r.sala_id!==filtroSala) return false;
-    if(filtroData && r.inicio.slice(0,10)!==filtroData) return false;
-    return true;
-  });
-  if(filtradas.length===0){ lista.innerHTML='<li class="muted">Nenhuma reserva encontrada</li>'; return; }
-  filtradas.forEach(r=>{
-    const sala = rooms.find(s=>s.id===r.sala_id) || {nome:'-'}
-    const user = users.find(u=>u.id===r.usuario_id) || {nome:'-'}
-    const li=document.createElement('li');
-    const inicio = new Date(r.inicio); const fim = new Date(r.fim);
-    li.innerHTML = `<div>
-        <strong>${sala.nome}</strong>
-        <div class="muted">${inicio.toLocaleString()} → ${fim.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
-        <div class="muted">Solicitante: ${user.nome} • ${r.finalidade}</div>
-      </div>`;
-    const actions=document.createElement('div'); actions.className='actions';
-    const btnCancel=document.createElement('button'); btnCancel.textContent='Cancelar'; btnCancel.className='small';
-    btnCancel.onclick = ()=>{ if(confirm('Confirmar cancelamento?')){ cancelarReserva(r.id); } };
-    actions.appendChild(btnCancel);
-    // se admin, permitir excluir
-    if(isAdmin()){
-      const del=document.createElement('button'); del.textContent='Excluir'; del.className='small';
-      del.onclick=()=>{ if(confirm('Excluir reserva?')){ excluirReserva(r.id); } };
-      actions.appendChild(del);
-    }
-    li.appendChild(actions);
-    lista.appendChild(li);
-  });
-}
-
-function cancelarReserva(id){
-  const reservas=getReservas();
-  const idx = reservas.findIndex(r=>r.id===id);
-  if(idx===-1) return alert('Reserva não encontrada');
-  reservas[idx].status='CANCELADA';
-  setReservas(reservas);
-  renderReservas();
-  alert('Reserva cancelada.');
-}
-function excluirReserva(id){
-  let reservas=getReservas();
-  reservas = reservas.filter(r=>r.id!==id);
-  setReservas(reservas);
-  renderReservas();
-}
-
-/* ---------- selects ---------- */
-function populateSalaSelects(){
-  const ss = document.getElementById('reservaSala');
-  const fs = document.getElementById('filterSala');
-  ss.innerHTML=''; fs.innerHTML='<option value="all">Todas as salas</option>';
-  getRooms().forEach(r=>{
-    const o=document.createElement('option'); o.value=r.id; o.textContent=r.nome; ss.appendChild(o);
-    const o2=document.createElement('option'); o2.value=r.id; o2.textContent=r.nome; fs.appendChild(o2);
-  });
-}
-
-/* ---------- export / import / reset ---------- */
-function exportarDados(){
-  const data = { users:getUsers(), rooms:getRooms(), reservas:getReservas() };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='reserva_data.json'; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importarPrompt(){
-  const text = prompt('Cole aqui o JSON exportado (ou deixe em branco para cancelar):');
-  if(!text) return;
-  try{
-    const obj = JSON.parse(text);
-    if(obj.users) save(L_KEYS.USERS, obj.users);
-    if(obj.rooms) save(L_KEYS.ROOMS, obj.rooms);
-    if(obj.reservas) save(L_KEYS.BOOKS, obj.reservas);
-    renderSalasList(); populateSalaSelects(); renderReservas();
-    alert('Dados importados com sucesso.');
-  }catch(e){ alert('JSON inválido'); }
-}
-
-function resetarDados(){
-  if(!confirm('Resetar todos os dados locais?')) return;
-  localStorage.removeItem(L_KEYS.USERS); localStorage.removeItem(L_KEYS.ROOMS); localStorage.removeItem(L_KEYS.BOOKS); localStorage.removeItem(L_KEYS.CUR);
-  seedIfEmpty();
-  alert('Dados resetados.');
-}
-
-function baixarRelatorio(){
-  // gera um .txt simples com resumo
-  const salas = getRooms().map(s=>`${s.nome} (cap: ${s.capacidade})`).join('\n');
-  const reservas = getReservas().map(r=>`${r.sala_id} | ${r.inicio} → ${r.fim} | ${r.finalidade} | ${r.status}`).join('\n');
-  const content = `Relatório rápido - Reservas\n\nSalas:\n${salas}\n\nReservas:\n${reservas}\n\nGerado em: ${nowISO()}`;
-  const blob = new Blob([content], {type:'text/plain'}); const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='reserva_relatorio.txt'; a.click(); URL.revokeObjectURL(url);
-}
-
-/* ---------- init ---------- */
-window.addEventListener('load', ()=>{
-  seedIfEmpty();
-  // bind filter date to today
-  document.getElementById('filterDate').value = '';
-});
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
