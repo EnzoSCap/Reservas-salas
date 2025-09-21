@@ -1,21 +1,70 @@
-# Sistema de Reservas de Salas — Protótipo (GitHub Pages)
+📅 Sistema de Reservas de Salas
 
-**Disciplina:** Engenharia e Projeto de Software  
-**Aluno:** Enzo Soares Capdeville (substitua se necessário)  
-**Resumo:** Protótipo cliente-only (Single Page App) que permite cadastrar usuários, criar salas e reservar horários com verificação de conflitos. Dados persistem no `localStorage` do navegador. Ideal para entrega via GitHub Pages.
+Protótipo funcional desenvolvido como parte da disciplina Engenharia e Projeto de Software.
+O sistema permite cadastrar salas, criar reservas com verificação de conflitos, visualizar a lista de reservas e cancelar agendamentos.
 
-## Como executar
-1. Acesse o GitHub Pages do repositório (ver instruções abaixo) ou simplesmente abra `index.html` localmente no navegador.
-2. Registrar um usuário (ou usar credenciais: admin@local / admin).  
-3. Como administrador (`tipo=admin`) você pode criar salas. Depois crie reservas.
+🔗 Acesse o sistema online: Reservas de Salas
 
-## Publicação no GitHub Pages
-- Vá em **Settings → Pages** e selecione **branch: main** e **root**. Salve.  
-- Após alguns minutos, a página ficará disponível em: `https://<seu-usuario>.github.io/<seu-repo>/`
+✨ Funcionalidades
 
-## Observações
-- Protótipo 100% client-side para facilitar avaliação e publicação sem servidor.
-- Export/Import de dados disponível para compartilhar estado entre avaliadores.
+Cadastro de salas com nome e capacidade.
 
-## Estrutura
-- `index.html` — aplicação completa (HTML / CSS / JS)
+Criação de reservas informando sala, data e horário.
+
+Verificação automática de conflitos de horário.
+
+Listagem de salas e reservas em tempo real.
+
+Cancelamento de reservas com apenas um clique.
+
+Persistência local utilizando localStorage (sem necessidade de back-end).
+
+🛠️ Tecnologias Utilizadas
+
+HTML5 – Estrutura da aplicação.
+
+CSS3 + Bootstrap 5 – Estilização e responsividade.
+
+JavaScript (ES6) – Lógica de funcionamento.
+
+LocalStorage – Armazenamento de dados no navegador.
+
+GitHub Pages – Publicação do sistema online.
+
+🚀 Como Executar Localmente
+
+Clone este repositório:
+
+git clone https://github.com/enzoscap/Reservas-salas.git
+
+
+Acesse a pasta do projeto:
+
+cd Reservas-salas
+
+
+Abra o arquivo index.html diretamente no navegador.
+
+Não é necessário servidor ou banco de dados. Todo o armazenamento é feito no localStorage do navegador.
+
+📚 Documentação Acadêmica
+
+Este projeto faz parte da atividade de Sistematização em Engenharia e Projeto de Software, seguindo o modelo fornecido pelo professor.
+O relatório completo contém:
+
+Definição do problema
+
+Requisitos funcionais e não funcionais
+
+Arquitetura do sistema
+
+Modelagem UML (Casos de Uso, Classes e Sequência)
+
+Implementação e testes
+
+Conclusão e referências
+
+👨‍💻 Autor
+
+Enzo Soares
+GitHub
