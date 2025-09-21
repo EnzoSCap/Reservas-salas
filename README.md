@@ -31,16 +31,16 @@ O sistema permite cadastrar salas, criar reservas com verificação de conflitos
 ## 🚀 Como Executar Localmente
 
 1. Clone este repositório:
-   ```bash
-   git clone https://github.com/enzoscap/Reservas-salas.git
+```bash
+git clone https://github.com/enzoscap/Reservas-salas.git
 Acesse a pasta do projeto:
 
 bash
 Copiar código
 cd Reservas-salas
-Abra o arquivo index.html diretamente no navegador.
+Abra o arquivo index.html diretamente no navegador (duplo clique no arquivo ou Ctrl+O no navegador e selecione index.html).
 
-⚠️ Não é necessário servidor ou banco de dados.
+⚠️ Nota: Não é necessário servidor ou banco de dados.
 Todo o armazenamento é feito no localStorage do navegador.
 
 📚 Documentação Acadêmica
@@ -61,4 +61,4 @@ Conclusão e referências
 
 👨‍💻 Autor
 Enzo Soares
-🔗 GitHub
+🔗 https://github.com/enzoscap
