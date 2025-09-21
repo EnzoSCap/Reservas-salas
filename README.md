@@ -32,7 +32,7 @@ O sistema permite cadastrar salas, criar reservas com verificação de conflitos
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/enzoscap/Reservas-salas.git
+https://github.com/enzoscap/Reservas-salas
 
 2. Acesse a pasta do projeto:
 
